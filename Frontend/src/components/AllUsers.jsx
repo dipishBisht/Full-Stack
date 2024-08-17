@@ -48,7 +48,7 @@ const SingleUser = ({ user, onDelete, onUpdate }) => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            onDelete(user.id);
+            onDelete();
             alert("User Deleted Sucessfully")
         } catch (error) {
             console.log('Error:', error);
@@ -61,7 +61,6 @@ const SingleUser = ({ user, onDelete, onUpdate }) => {
                 <div className='h-28 w-28 bg-black rounded-full' />
             </div>
             <div className='flex flex-col gap-3 text-lg'>
-                <div>Id : {user.id}</div>
                 <div>Name : {`${user.firstName} ${user.lastName}`}</div>
                 <div>Age : {user.age}</div>
                 <div>Email : {user.email}</div>
@@ -148,27 +147,24 @@ const SingleUser = ({ user, onDelete, onUpdate }) => {
 const AllUsers = () => {
     const [allUsers, setAllUsers] = useState([]);
 
+    const fetchData = async () => {
+        const users = await fetch('/form/api/users');
+        const usersJson = await users.json();
+        setAllUsers(usersJson);
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            const users = await fetch('/form/api/users');
-            const usersJson = await users.json();
-            setAllUsers(usersJson);
-        };
         fetchData();
     }, []);
 
-    const handleDeleteUser = (userId) => {
-        setAllUsers(allUsers.filter(user => user.id !== userId));
-    };
-
-    const handleUpdateUser = () => {
-        const fetchData = async () => {
-            const users = await fetch('/form/api/users');
-            const usersJson = await users.json();
-            setAllUsers(usersJson);
-        };
-        fetchData();
-    };
+    // const handleUpdateUser = () => {
+    //     const fetchData = async () => {
+    //         const users = await fetch('/form/api/users');
+    //         const usersJson = await users.json();
+    //         setAllUsers(usersJson);
+    //     };
+    //     fetchData();
+    // };
 
     if (allUsers.length > 0) {
         return (
@@ -177,8 +173,8 @@ const AllUsers = () => {
                     <SingleUser
                         key={user.id}
                         user={user}
-                        onDelete={handleDeleteUser}
-                        onUpdate={handleUpdateUser}
+                        onDelete={fetchData}
+                        onUpdate={fetchData}
                     />
                 ))}
             </div>

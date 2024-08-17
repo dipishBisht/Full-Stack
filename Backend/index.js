@@ -1,56 +1,46 @@
 const express = require('express');
-const fs = require('fs');
+const connect = require("./connetion")
+const UserModel = require("./models/allUsers");
 
 const app = express();
 
+connect("mongodb://127.0.0.1:27017/miniUsers").then(() => console.log("Connected to Mongo")).catch((err) => console.log(err))
+
 app.use(express.json());
 
-app.get('/form/api/users', (req, res) => {
-  const usersData = JSON.parse(fs.readFileSync('Database.json', 'utf-8'));
+app.get('/form/api/users', async (req, res) => {
+  const usersData = await UserModel.find();
   res.status(200).send(usersData);
 });
 
-app.post('/form/signUpData', (req, res) => {
+app.post('/form/signUpData', async (req, res) => {
   const body = req.body;
-  console.log('Received data:', body);
-  const data = JSON.parse(fs.readFileSync('Database.json', 'utf-8'));
-  if (!data) {
-    fs.writeFile('Database.json', JSON.stringify([{ id: 1, ...body }]), (err) => {
-      if (err) res.json({ status: 'error' });
-      else res.json({ status: 'success' });
-    });
+  if (body && body.firstName && body.lastName && body.age && body.email) {
+    const data = await UserModel.create(body);
+    if (!data) return res.status(500).json({ status: "error", message: "Unexpected Error" })
+    return res.status(201).json({ status: "success", message: "User Created", user: data })
   } else {
-    data.push({ id: data.length + 1, ...body });
-    fs.writeFile('Database.json', JSON.stringify(data), (err) => {
-      if (err) res.json({ status: 'error' });
-      else res.json({ status: 'success', message: 'Data added successfully' });
-    });
+    return res.status(400).json({ status: "error", message: "Bad Request" })
   }
 });
 
-app.delete('/form/deleteData', (req, res) => {
-  const body = req.body;
-  const data = JSON.parse(fs.readFileSync('Database.json', 'utf-8'));
-  const newData = data.filter(user => user.id !== body.id);
-  fs.writeFile('Database.json', JSON.stringify(newData), (err) => {
-    if (err) res.json({ status: 'error' });
-    else res.json({ status: 'success', message: 'User deleted successfully' });
-  });
+app.delete('/form/deleteData', async (req, res) => {
+  const { _id: id } = req.body;
+  if (!id)
+    return res.status(500).json({ status: "error", message: "Unexpected Error" })
+
+  const response = await UserModel.findByIdAndDelete(id);
+  if (!response) return res.status(400).json({ status: "error", message: "No user found" })
+
+  return res.status(200).json({ status: "success", message: "User deleted successfully", response })
 });
 
-app.put("/form/updateUser", (req, res) => {
+app.put("/form/updateUser", async (req, res) => {
   const body = req.body;
-  console.log(body);
-  const allUsers = JSON.parse(fs.readFileSync("Database.json", "utf-8"));
 
-  const findedUser = allUsers.findIndex((user) => user.id === body.id)
-  if (findedUser === -1) return res.json({ status: error, message: "User Not found" })
-  allUsers[findedUser] = body;
-
-  fs.writeFile("Database.json", JSON.stringify(allUsers), (err) => {
-    if (err) return res.json({ status: "Error", message: "User not updated" })
-    return res.json({ status: "Success", message: "User updated sucessfully" })
-  })
+  const response = await UserModel.findByIdAndUpdate(body._id, body, { new: true });
+  if (!response) return res.status(400).json({ status: "error", message: "Invalid Id" });
+  return res.status(200).json({ status: "success", message: "User updated successfully", user: response });
 })
 
 app.listen(3000, () => console.log('Server Started'));
