@@ -157,15 +157,6 @@ const AllUsers = () => {
         fetchData();
     }, []);
 
-    // const handleUpdateUser = () => {
-    //     const fetchData = async () => {
-    //         const users = await fetch('/form/api/users');
-    //         const usersJson = await users.json();
-    //         setAllUsers(usersJson);
-    //     };
-    //     fetchData();
-    // };
-
     if (allUsers.length > 0) {
         return (
             <div className='flex flex-col items-center my-10 gap-10 max-w-[70vw] mx-auto'>
