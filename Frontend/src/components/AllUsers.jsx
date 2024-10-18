@@ -17,7 +17,7 @@ const SingleUser = ({ user, onDelete, onUpdate }) => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("/https://mini-project-backend-rbuf.onrender.com/updateUser", {
+            const response = await fetch("https://mini-project-backend-rbuf.onrender.com/updateUser", {
                 method: "PUT",
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ const SingleUser = ({ user, onDelete, onUpdate }) => {
 
     const handleDelete = async () => {
         try {
-            const response = await fetch('/https://mini-project-backend-rbuf.onrender.com/deleteData', {
+            const response = await fetch('https://mini-project-backend-rbuf.onrender.com/deleteData', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -148,7 +148,7 @@ const AllUsers = () => {
     const [allUsers, setAllUsers] = useState([]);
 
     const fetchData = async () => {
-        const users = await fetch('/https://mini-project-backend-rbuf.onrender.com/api/users');
+        const users = await fetch('https://mini-project-backend-rbuf.onrender.com/api/users');
         const usersJson = await users.json();
         setAllUsers(usersJson);
     };

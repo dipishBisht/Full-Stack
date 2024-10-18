@@ -12,7 +12,7 @@ const Form = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const users = await fetch('/https://mini-project-backend-rbuf.onrender.com/api/users')
+                const users = await fetch('https://mini-project-backend-rbuf.onrender.com/api/users')
                 const usersJson = await users.json();
                 setData(usersJson);
             } catch (error) {
@@ -45,7 +45,7 @@ const Form = () => {
             return
         }
         try {
-            const response = await fetch('/https://mini-project-backend-rbuf.onrender.com/signUpData', {
+            const response = await fetch('https://mini-project-backend-rbuf.onrender.com/signUpData', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
