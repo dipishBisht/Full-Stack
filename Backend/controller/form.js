@@ -1,8 +1,13 @@
 const UserModel= require("../models/allUsers") 
 
 async function getUsersData(_, res) {
-    const usersData = await UserModel.find();
-    res.status(200).send(usersData);
+   try {
+        const usersData = await UserModel.find();
+        res.status(200).json(usersData);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 }
 
 async function signUpUser(req, res) {
