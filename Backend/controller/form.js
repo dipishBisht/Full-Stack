@@ -1,3 +1,5 @@
+const UserModel= require("../models/allUsers") 
+
 async function getUsersData(_, res) {
     const usersData = await UserModel.find();
     res.status(200).send(usersData);

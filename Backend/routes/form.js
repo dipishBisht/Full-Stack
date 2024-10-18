@@ -12,4 +12,4 @@ router.delete('/deleteData', deleteUser);
 
 router.put("/updateUser", updateUser)
 
-module.exports = form;
+module.exports = router;

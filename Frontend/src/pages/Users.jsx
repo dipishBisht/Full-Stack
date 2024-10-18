@@ -1,4 +1,4 @@
-import React from 'react'
+
 import AllUsers from '../components/AllUsers'
 
 const Users = () => {

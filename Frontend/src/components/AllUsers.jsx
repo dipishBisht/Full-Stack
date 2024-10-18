@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const SingleUser = ({ user, onDelete, onUpdate }) => {
     const [open, setOpen] = useState(false);
@@ -162,7 +162,7 @@ const AllUsers = () => {
             <div className='flex flex-col items-center my-10 gap-10 max-w-[70vw] mx-auto'>
                 {allUsers.map(user => (
                     <SingleUser
-                        key={user.id}
+                        key={user.firstName}
                         user={user}
                         onDelete={fetchData}
                         onUpdate={fetchData}
