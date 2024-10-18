@@ -3,6 +3,7 @@ const UserModel= require("../models/allUsers")
 async function getUsersData(_, res) {
    try {
         const usersData = await UserModel.find();
+        console.log(usersData);
         res.status(200).json(usersData);
     } catch (error) {
         console.error(error);

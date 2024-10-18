@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(cors({
-    origin: "https://mini-project-frontend-2srzrqlf3-dipish-bishts-projects.vercel.app",
+    origin: "https://mini-project-frontend-snowy.vercel.app/",
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true
 }))
